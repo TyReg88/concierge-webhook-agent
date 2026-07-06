@@ -29,4 +29,15 @@ The agent architecture demonstrates the following key concepts from the course:
 3. **Security Features (Data Minimization & Isolation):** By isolating the agent's logic into a simulated sandbox environment, the architecture demonstrates secure design principles. The agent operates without requiring direct access to a physical core switch or gateway, eliminating the risk of internal network compromise.
 
 ## Setup & Testing
-*(Hier fügen wir später die konkreten Befehle zum Starten des Python-Skripts und zum Senden eines simulierten cURL-Requests ein.)*
+
+**Security Notice (Credential Management):**
+To fulfill the security requirements of a Concierge Agent, all sensitive credentials (such as the Google Gemini API key) are strictly excluded from version control. The application utilizes `python-dotenv` for local environment variable management.
+
+**1. Environment Setup**
+Duplicate the template file to create your local configuration:
+`cp .env.example .env`
+Open the `.env` file and insert your valid Gemini API key.
+
+**2. Start the Server**
+Ensure all requirements are installed (`pip install -r requirements.txt`), then start the FastAPI application via uvicorn:
+`uvicorn main:app --reload`
