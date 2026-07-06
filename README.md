@@ -39,5 +39,15 @@ Duplicate the template file to create your local configuration:
 Open the `.env` file and insert your valid Gemini API key.
 
 **2. Start the Server**
-Ensure all requirements are installed (`pip install -r requirements.txt`), then start the FastAPI application via uvicorn:
-`uvicorn main:app --reload`
+create virtual environment (`python -m venv .venv`),
+Ensure all requirements are installed (`.\.venv\Scripts\python.exe -m pip install -r requirements.txt`),
+activate virtual environment (`.venv\Scripts\activate`),
+then start the FastAPI application via uvicorn (`uvicorn main:app --reload`).
+
+
+### Troubleshooting (Windows ARM64 / Snapdragon)
+If the dependency installation fails on Windows ARM64 (e.g. Snapdragon devices) while building the `cryptography` package from source (due to missing Rust compiler or OpenSSL environment), install a precompiled, compatible wheel first:
+```powershell
+.\.venv\Scripts\pip.exe install cryptography --only-binary=:all:
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
