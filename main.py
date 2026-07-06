@@ -24,7 +24,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-MOCK_STATE_PATH = os.path.join(os.path.dirname(__file__), "mock_state.json")
+MOCK_STATE_PATH = os.path.join(os.path.dirname(__file__), "data", "mock_state.json")
 
 # Pydantic models for API validation
 class WebhookRequest(BaseModel):
@@ -86,6 +86,26 @@ def set_device_state(entity_id: str, state: str) -> Dict[str, Any]:
         return {"error": f"Failed to save updated state: {str(e)}"}
 
 
+def good_morning() -> Dict[str, Any]:
+    """
+    Activates the 'Good Morning' scene.
+    This opens all window covers/blinds (roller shutters) in the house.
+    Use this tool when the user says good morning, starts the day, or asks to open all covers/shutters.
+    """
+    from scripts.good_morning import trigger_good_morning
+    return trigger_good_morning()
+
+
+def good_night() -> Dict[str, Any]:
+    """
+    Activates the 'Good Night' scene.
+    This closes all window covers/blinds (roller shutters) in the house.
+    Use this tool when the user says good night, goes to bed, or asks to close all covers/shutters.
+    """
+    from scripts.good_night import trigger_good_night
+    return trigger_good_night()
+
+
 def fallback_dispatcher(query: str) -> Dict[str, Any]:
     """
     Fallback deterministic dispatcher that runs when the Gemini API is unavailable or has billing issues.
@@ -95,8 +115,20 @@ def fallback_dispatcher(query: str) -> Dict[str, Any]:
     response_msg = "Ich konnte die Anfrage leider nicht verstehen."
     actions_taken = []
     
+    # Check for Scenes
+    if any(w in query_lower for w in ["guten morgen", "good morning", "aufstehen", "morgen"]):
+        from scripts.good_morning import trigger_good_morning
+        res = trigger_good_morning()
+        actions_taken.append(res)
+        response_msg = "Guten Morgen! Ich habe alle Rollläden geöffnet."
+    elif any(w in query_lower for w in ["gute nacht", "good night", "schlafen", "nacht"]):
+        from scripts.good_night import trigger_good_night
+        res = trigger_good_night()
+        actions_taken.append(res)
+        response_msg = "Gute Nacht! Ich habe alle Rollläden geschlossen."
+    
     # Check for Sofa Licht
-    if "sofa" in query_lower:
+    elif "sofa" in query_lower:
         if any(w in query_lower for w in ["an", "on", "dunkel", "dark", "heller"]):
             res = set_device_state("light.ground_livingroom_sofa", "on")
             actions_taken.append(res)
@@ -120,11 +152,11 @@ def fallback_dispatcher(query: str) -> Dict[str, Any]:
     # Check for Küchenfenster Rollladen
     elif any(w in query_lower for w in ["küche", "kitchen", "rollladen", "fenster", "window"]):
         if any(w in query_lower for w in ["auf", "open", "öffn"]):
-            res = set_device_state("cover.ground_kitchen_window", "open")
+            res = set_device_state("cover.ground_kitchen", "open")
             actions_taken.append(res)
             response_msg = "Ich habe den Rollladen am Küchenfenster geöffnet."
         elif any(w in query_lower for w in ["zu", "close", "schließ"]):
-            res = set_device_state("cover.ground_kitchen_window", "closed")
+            res = set_device_state("cover.ground_kitchen", "closed")
             actions_taken.append(res)
             response_msg = "Ich habe den Rollladen am Küchenfenster geschlossen."
             
@@ -178,7 +210,7 @@ async def process_intent(payload: WebhookRequest):
             model="gemini-3.1-flash-lite",
             contents=payload.query,
             config=types.GenerateContentConfig(
-                tools=[get_home_state, set_device_state],
+                tools=[get_home_state, set_device_state, good_morning, good_night],
                 system_instruction=SYSTEM_INSTRUCTION
             )
         )

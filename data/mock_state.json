@@ -8,10 +8,10 @@
             "floor": "ground"
         },
         {
-            "entity_id": "cover.ground_kitchen_window",
-            "friendly_name": "K\u00fcchenfenster Rollladen",
-            "state": "closed",
-            "domain": "cover",
+            "entity_id": "light.ground_kitchen",
+            "friendly_name": "K\u00fcchen Licht",
+            "state": "on",
+            "domain": "light",
             "floor": "ground"
         },
         {
@@ -20,6 +20,20 @@
             "state": "off",
             "domain": "light",
             "floor": "ext"
+        },
+        {
+            "entity_id": "cover.ground_livingroom",
+            "friendly_name": "Wohnzimmer Rollladen",
+            "state": "closed",
+            "domain": "cover",
+            "floor": "ground"
+        },
+        {
+            "entity_id": "cover.ground_kitchen",
+            "friendly_name": "K\u00fcchen Rollladen",
+            "state": "closed",
+            "domain": "cover",
+            "floor": "ground"
         },
         {
             "entity_id": "camera.ext_frontdoor_main",

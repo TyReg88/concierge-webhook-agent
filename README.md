@@ -24,7 +24,7 @@ The project was entirely conceptualized and implemented using an AI-assisted wor
 ## Demonstrated Key Concepts
 The agent architecture demonstrates the following key concepts from the course:
 
-1. **Agent Skills (Tool Use):** The agent is equipped with deterministic Python functions (skills). It autonomously decides when to invoke tools like `get_home_state()` to query the simulated environment before generating a final response.
+1. **Agent Skills (Tool Use):** The agent is equipped with deterministic Python functions (skills). It autonomously decides when to invoke basic tools like `get_home_state()` or custom-coded scenes like `good_morning()` and `good_night()` (which execute underlying modular scripts to manipulate cover states) before generating a final response.
 2. **Context Management & Mapping:** The system effectively maps unstructured natural language inputs (e.g., "turn on the light in the basement") to strict technical system entity IDs (e.g., `base`).
 3. **Security Features (Data Minimization & Isolation):** By isolating the agent's logic into a simulated sandbox environment, the architecture demonstrates secure design principles. The agent operates without requiring direct access to a physical core switch or gateway, eliminating the risk of internal network compromise.
 
