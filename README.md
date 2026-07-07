@@ -45,7 +45,19 @@ activate virtual environment (`.venv\Scripts\activate`),
 then start the FastAPI application via uvicorn (`uvicorn main:app --reload`).
 
 
-### Troubleshooting (Windows ARM64 / Snapdragon)
+### Troubleshooting
+
+#### PowerShell Script Execution Error (Windows)
+If you get a security error when activating the virtual environment in PowerShell (`Activate.ps1 cannot be loaded because running scripts is disabled`), you can allow script execution for your current terminal session by running:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+```
+Then activate the environment:
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+#### Windows ARM64 / Snapdragon Dependency Issues
 If the dependency installation fails on Windows ARM64 (e.g. Snapdragon devices) while building the `cryptography` package from source (due to missing Rust compiler or OpenSSL environment), install a precompiled, compatible wheel first:
 ```powershell
 .\.venv\Scripts\pip.exe install cryptography --only-binary=:all:
