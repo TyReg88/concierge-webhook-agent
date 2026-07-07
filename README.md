@@ -37,10 +37,10 @@ To fulfill the security requirements of a Concierge Agent, all sensitive credent
 Duplicate the template file to create your local configuration:
 `cp .env.example .env`
 Open the `.env` file and insert your valid Gemini API key.
-
-**2. Start the Server**
 create virtual environment (`python -m venv .venv`),
 Ensure all requirements are installed (`.\.venv\Scripts\python.exe -m pip install -r requirements.txt`),
+
+**2. Start the Server**
 activate virtual environment (`.venv\Scripts\activate`),
 then start the FastAPI application via uvicorn (`uvicorn main:app --reload`).
 
